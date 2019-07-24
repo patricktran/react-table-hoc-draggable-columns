@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DomHelper from './DomHelper';
+import './styles.scss';
 
 const DragMode = {
   REORDER: 'reorder',
@@ -86,14 +87,23 @@ export default Component => {
 
             e.dataTransfer.setData('text', 'b'); // Firefox requires this to make dragging possible
 
-            const { target } = e;
             if (useDragImage) {
-              //const crt = this.draggedColumn.cloneNode(true);
-              const crt = target.cloneNode(true);
+              const crt = this.draggedColumn.cloneNode(true);
+              const columnWidth = DomHelper.getElementWidth(this.draggedColumn);
+              const columnHeight = DomHelper.getElementHeight(this.draggedColumn);
+              //calculate offset from draggedColumn element
+              let xOffSet = Math.floor(columnWidth / 2);
+              const yOffSet = Math.floor(columnHeight / 2);
+
+              //max-width of 300px, otherwise it looks blurry in Chrome (Windows)
+              if (columnWidth > 300) {
+                crt.style.width = '300px';
+                xOffSet = 300 / 2;
+              }
               crt.className = dragImageOptions.className;
 
               document.body.appendChild(crt);
-              e.dataTransfer.setDragImage(crt, dragImageOptions.xOffset, dragImageOptions.yOffset);
+              e.dataTransfer.setDragImage(crt, xOffSet, yOffSet);
             }
           };
 
@@ -374,9 +384,9 @@ export default Component => {
     overflow: 'auto',
     useDragImage: false,
     dragImageOptions: {
-      className: 'dragged-item',
-      xOffset: 150,
-      yOffset: 10
+      className: 'rt-dragged-item',
+     // xOffset: 150,
+      //yOffset: 10
     },
     onDragEnterClassName: 'drag-enter-item'
   };
@@ -392,8 +402,8 @@ export default Component => {
       useDragImage: PropTypes.bool,
       dragImageOptions: PropTypes.shape({
         className: PropTypes.string,
-        xOffset: PropTypes.number,
-        yOffset: PropTypes.number
+        //xOffset: PropTypes.number,
+        //yOffset: PropTypes.number
       }),
       /** Swap mode only - css class */
       onDragEnterClassName: PropTypes.string,

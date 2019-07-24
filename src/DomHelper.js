@@ -66,6 +66,32 @@ const getHiddenElementOuterWidth = element => {
   return elementWidth;
 };
 
+const getElementWidth = el => {
+  let width = el.offsetWidth;
+  let style = getComputedStyle(el);
+
+  width -=
+    parseFloat(style.paddingLeft) +
+    parseFloat(style.paddingRight) +
+    parseFloat(style.borderLeftWidth) +
+    parseFloat(style.borderRightWidth);
+
+  return width;
+};
+
+const getElementHeight = el => {
+  let height = el.offsetHeight;
+  let style = getComputedStyle(el);
+
+  height -=
+    parseFloat(style.paddingTop) +
+    parseFloat(style.paddingBottom) +
+    parseFloat(style.borderTopWidth) +
+    parseFloat(style.borderBottomWidth);
+
+  return height;
+};
+
 export default {
   stripHtml,
   getOffset,
@@ -75,5 +101,7 @@ export default {
   hasClass,
   getHiddenElementOuterHeight,
   getHiddenElementOuterWidth,
-  findFirstChildWithClassName
+  findFirstChildWithClassName,
+  getElementWidth,
+  getElementHeight
 };
