@@ -35,7 +35,7 @@ render () {
     <ReactTableDraggableColumns
       draggableColumns= {{
         mode: 'reorder',
-        draggable=['firstName', 'age']
+        draggable: ['firstName', 'age']
       }}
       data={data}
       columns={[
