@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { storiesOf } from '@storybook/react';
+import { storiesOf,addDecorator  } from '@storybook/react';
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import withDraggableColumns from 'react-table-hoc-draggable-columns';
@@ -17,7 +17,7 @@ stories
 
     return <ReactTableDraggableColumns
       style={{
-        width: '100%',
+        width: '98vw',
         height: '500px'
       }}
       columns={SampleData.carColumns}
@@ -35,7 +35,7 @@ stories
 
     return <ReactTableDraggableColumns
       style={{
-        width: '100%',
+        width: '98vw',
         height: '500px'
       }}
       columns={SampleData.carColumns}

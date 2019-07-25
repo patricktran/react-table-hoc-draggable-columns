@@ -61,7 +61,7 @@ export default Component => {
               draggableColumns: {
                 disableTableScroll,
                 useDragImage = defaultProps.useDragImage,
-                dragImageOptions = defaultProps.dragImageOptions
+                dragImageClassName = defaultProps.dragImageClassName
               }
             } = this.props;
 
@@ -87,42 +87,31 @@ export default Component => {
 
             e.dataTransfer.setData('text', 'b'); // Firefox requires this to make dragging possible
 
-           /* if (useDragImage) {
+            if (useDragImage) {
               const crt = this.draggedColumn.cloneNode(true);
-         
+
+              crt.className = dragImageClassName;
               const columnWidth = DomHelper.getElementWidth(this.draggedColumn);
               const columnHeight = DomHelper.getElementHeight(this.draggedColumn);
               //calculate offset from draggedColumn element
               let xOffSet = Math.floor(columnWidth / 2);
               const yOffSet = Math.floor(columnHeight / 2);
 
-              //max-width of 300px, otherwise it looks blurry in Chrome (Windows)
-              if (columnWidth > 300) {
-                crt.style.width = '300px';
-                xOffSet = 300 / 2;
+              //max-width of 150px, otherwise it looks blurry in Chrome (Windows)
+              if (columnWidth > 150) {
+                crt.style.width = '150px';
+                xOffSet = 150 / 2;
               }
-              crt.className = dragImageOptions.className;
-              // crt.style.position = "absolute";
-              // crt.style.top = "-1000px";
 
-              //todo - figure out why dragImage not working in storybook
+              crt.style.position = 'absolute';
+              crt.style.top = '-1000px';
 
-              console.log(xOffSet, yOffSet, columnWidth);
               document.body.appendChild(crt);
-              console.log(document);
-              console.log(document.body);
+              e.dataTransfer.effectAllowed = 'move';
               e.dataTransfer.setDragImage(crt, xOffSet, yOffSet);
-            }*/
 
-            
-            const { target } = e;
-            if (useDragImage) {
-              //const crt = this.draggedColumn.cloneNode(true);
-              const crt = target.cloneNode(true);
-              crt.className = dragImageOptions.className;
-
-              document.body.appendChild(crt);
-              e.dataTransfer.setDragImage(crt, dragImageOptions.xOffset, dragImageOptions.yOffset);
+              //set refernce to cloned Node
+              this.clone = crt;
             }
           };
 
@@ -269,6 +258,11 @@ export default Component => {
 
             e.stopPropagation();
 
+            if (this.clone) {
+              document.body.removeChild(this.clone);
+              this.clone = null;
+            }
+
             if (disableTableScroll) {
               const tableBody = DomHelper.findFirstChildWithClassName(
                 this.containerRef.current,
@@ -402,11 +396,7 @@ export default Component => {
     disableTableScroll: false,
     overflow: 'auto',
     useDragImage: true,
-    dragImageOptions: {
-      className: 'rt-dragged-item'
-      // xOffset: 150,
-      //yOffset: 10
-    },
+    dragImageClassName: 'rt-dragged-item',
     onDragEnterClassName: 'rt-drag-enter-item'
   };
 
@@ -424,15 +414,11 @@ export default Component => {
       overflow: PropTypes.string,
       /** clone dragged column?  useful for applying a different css class */
       useDragImage: PropTypes.bool,
-      /** dragImageOptions only applies when useDragImage={true} */
-      dragImageOptions: PropTypes.shape({
-        className: PropTypes.string
-        //xOffset: PropTypes.number,
-        //yOffset: PropTypes.number
-      }),
+      /** dragImageClassName only applies when useDragImage={true} */
+      dragImageClassName: PropTypes.string,
       /** Swap mode only - css class */
       onDragEnterClassName: PropTypes.string,
-      /** callback method to be notified when column order changes */
+      /** callback method to be notified when column order changes - signature: function(columns)  */
       onDraggedColumnChange: PropTypes.func
     })
   };
