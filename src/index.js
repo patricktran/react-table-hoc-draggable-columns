@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DomHelper from './DomHelper';
+import DomHelper from './dom-helper';
 import './styles.scss';
 
 const DragMode = {
@@ -60,7 +60,7 @@ export default Component => {
             const {
               draggableColumns: {
                 disableTableScroll,
-                useDragImage,
+                useDragImage = defaultProps.useDragImage,
                 dragImageOptions = defaultProps.dragImageOptions
               }
             } = this.props;
@@ -87,8 +87,9 @@ export default Component => {
 
             e.dataTransfer.setData('text', 'b'); // Firefox requires this to make dragging possible
 
-            if (useDragImage) {
+           /* if (useDragImage) {
               const crt = this.draggedColumn.cloneNode(true);
+         
               const columnWidth = DomHelper.getElementWidth(this.draggedColumn);
               const columnHeight = DomHelper.getElementHeight(this.draggedColumn);
               //calculate offset from draggedColumn element
@@ -101,9 +102,27 @@ export default Component => {
                 xOffSet = 300 / 2;
               }
               crt.className = dragImageOptions.className;
+              // crt.style.position = "absolute";
+              // crt.style.top = "-1000px";
+
+              //todo - figure out why dragImage not working in storybook
+
+              console.log(xOffSet, yOffSet, columnWidth);
+              document.body.appendChild(crt);
+              console.log(document);
+              console.log(document.body);
+              e.dataTransfer.setDragImage(crt, xOffSet, yOffSet);
+            }*/
+
+            
+            const { target } = e;
+            if (useDragImage) {
+              //const crt = this.draggedColumn.cloneNode(true);
+              const crt = target.cloneNode(true);
+              crt.className = dragImageOptions.className;
 
               document.body.appendChild(crt);
-              e.dataTransfer.setDragImage(crt, xOffSet, yOffSet);
+              e.dataTransfer.setDragImage(crt, dragImageOptions.xOffset, dragImageOptions.yOffset);
             }
           };
 
@@ -382,31 +401,38 @@ export default Component => {
     draggable: [],
     disableTableScroll: false,
     overflow: 'auto',
-    useDragImage: false,
+    useDragImage: true,
     dragImageOptions: {
-      className: 'rt-dragged-item',
-     // xOffset: 150,
+      className: 'rt-dragged-item'
+      // xOffset: 150,
       //yOffset: 10
     },
-    onDragEnterClassName: 'drag-enter-item'
+    onDragEnterClassName: 'rt-drag-enter-item'
   };
 
   wrapper.displayName = 'RTDraggableColumn';
 
   wrapper.propTypes = {
     draggableColumns: PropTypes.shape({
+      /** mode to either reorder the column or swap column position on drop */
       mode: PropTypes.oneOf([DragMode.REORDER, DragMode.SWAP]).isRequired,
+      /** array of column accessors to allow drag and drop */
       draggable: PropTypes.arrayOf(PropTypes.string),
+      /** disable ReactTable horizontal/vertical scrolling when dragging a column */
       disableTableScroll: PropTypes.bool,
+      /** used with disableTableScroll={true} to reset ReactTable overflow style onDragEnd event */
       overflow: PropTypes.string,
+      /** clone dragged column?  useful for applying a different css class */
       useDragImage: PropTypes.bool,
+      /** dragImageOptions only applies when useDragImage={true} */
       dragImageOptions: PropTypes.shape({
-        className: PropTypes.string,
+        className: PropTypes.string
         //xOffset: PropTypes.number,
         //yOffset: PropTypes.number
       }),
       /** Swap mode only - css class */
       onDragEnterClassName: PropTypes.string,
+      /** callback method to be notified when column order changes */
       onDraggedColumnChange: PropTypes.func
     })
   };

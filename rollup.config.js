@@ -5,6 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
 import svgr from '@svgr/rollup'
+import scss from 'rollup-plugin-scss'
 
 import pkg from './package.json'
 
@@ -24,8 +25,10 @@ export default {
   ],
   plugins: [
     external(),
+    scss(),
     postcss({
-      modules: true
+      extract: "./dist/styles.css",
+      minimize: true  
     }),
     url(),
     svgr(),

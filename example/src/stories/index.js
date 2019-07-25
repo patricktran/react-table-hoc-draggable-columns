@@ -1,19 +1,50 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+import withDraggableColumns from 'react-table-hoc-draggable-columns';
+import 'react-table-hoc-draggable-columns/dist/styles.css';
 
-import { Button, Welcome } from '@storybook/react/demo';
+import SampleData from './sample-data';
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+const stories = storiesOf('ReactTableDraggableColumns', module);
 
-storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-  .add('with some emoji', () => (
-    <Button onClick={action('clicked')}>
-      <span role="img" aria-label="so cool">
-        😀 😎 👍 💯
-      </span>
-    </Button>
-  ));
+stories
+  .add('Reorder Columns', () => {
+
+    const ReactTableDraggableColumns = withDraggableColumns(ReactTable);
+
+    return <ReactTableDraggableColumns
+      style={{
+        width: '100%',
+        height: '500px'
+      }}
+      columns={SampleData.carColumns}
+      data={SampleData.carData}
+      showPagination={false}
+      draggableColumns={{
+        mode: 'reorder',
+        draggable: ['vin', 'year', 'brand', 'color']
+      }}
+    />
+  })
+  .add('Swap Columns', () => {
+
+    const ReactTableDraggableColumns = withDraggableColumns(ReactTable);
+
+    return <ReactTableDraggableColumns
+      style={{
+        width: '100%',
+        height: '500px'
+      }}
+      columns={SampleData.carColumns}
+      data={SampleData.carData}
+      showPagination={false}
+      draggableColumns={{
+        mode: 'swap',
+        draggable: ['vin', 'year', 'brand', 'color']
+      }}
+    />
+  }
+  )
