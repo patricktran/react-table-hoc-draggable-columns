@@ -9,8 +9,8 @@ Higher Order Component for [ReactTable](https://react-table.js.org) to enable Dr
 # Documentation
 
 - [Install](#install)
-- [Storybook examples](#usage)
-- [Storybook examples](https://patricktran.github.io/react-table-hoc-draggable-columns/)
+- [Usage](#usage)
+- [Demo](https://patricktran.github.io/react-table-hoc-draggable-columns/)
 
 ## Install
 
@@ -54,8 +54,21 @@ render () {
     />
   )
 }
+```
+
+## draggableColumns Prop
+
+| Property                | Description                                                                             | Default value        | Type             | Required |
+| ----------------------- | --------------------------------------------------------------------------------------- | -------------------- | ---------------- | -------- |
+| `mode`                  | mode to either 'reorder' the column or 'swap' column position on drop                   | 'reorder'            | string           | yes      |
+| `draggable`             | array of column accessors to allow drag and drop                                        |                      | array of strings |          |
+| `disableTableScroll`    | disable ReactTable horizontal/vertical scrolling when dragging a column                 | false                | bool             |          |
+| `overflow`              | used with disableTableScroll={true} to reset ReactTable overflow style onDragEnd event  | `auto`               | string           |          |
+| `useDragImage`          | clone dragged column element? useful for applying a different css class.                | true                 | bool             |          |
+| `dragImageClassName`    | dragImageClassName only applies when useDragImage={true}                                | `rt-dragged-item`    | string           |          |
+| `onDragEnterClassName`  | when mode={'swap'} - css class applied on dragged over column                           | `rt-drag-enter-item` | string           |          |
+| `onDraggedColumnChange` | callback method to be notified when column order changes - signature: function(columns) |                      | function         |          |
 
 ## License
 
 MIT © [patricktran](https://github.com/patricktran)
-```
