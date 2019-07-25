@@ -10,7 +10,7 @@ Higher Order Component for [ReactTable](https://react-table.js.org) to enable Dr
 
 - [Install](#install)
 - [Storybook examples](#usage)
-- [Storybook examples](#simple-example)
+- [Storybook examples](https://patricktran.github.io/react-table-hoc-draggable-columns/)
 
 ## Install
 
