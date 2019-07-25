@@ -5,6 +5,7 @@
 [![NPM](https://img.shields.io/npm/v/react-table-hoc-draggable-columns.svg)](https://www.npmjs.com/package/react-table-hoc-draggable-columns) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 Higher Order Component for [ReactTable](https://react-table.js.org) to enable Draggable columns for reordering or swapping positions.
+
 \*Note: This version supports V6 of React Table.
 
 # Documentation
