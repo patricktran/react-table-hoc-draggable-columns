@@ -228,8 +228,17 @@ export default Component => {
               ) {
                 allowDrop = false
               }
+
               if (allowDrop) {
-                this.reorder.push({ a: i, b: this.dragged })
+                // readjust dropIndex value for edge cases
+                // if dragging a column from left to right
+                if (this.dragged < dropIndex) {
+                  if (this.dropPosition === -1) { dropIndex = dropIndex - 1 }
+                } else { // dragging a column from right to left
+                  if (this.dropPosition === 1) { dropIndex = dropIndex + 1 }
+                }
+
+                this.reorder.push({ a: dropIndex, b: this.dragged })
 
                 // trigger a re-render
                 this.setState({ trigger: Math.random(), firstLoad: false })
