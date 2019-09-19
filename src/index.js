@@ -51,7 +51,18 @@ export default Component => {
         if (header.className.includes('enable-drag')) {
           const headerParent = header.parentNode
 
-          headerParent.setAttribute('draggable', true)
+          const {
+            draggableColumns: {
+              enableColumnWideDrag = defaultProps.enableColumnWideDrag
+            }
+          } = this.props
+
+          if (enableColumnWideDrag) {
+            headerParent.setAttribute('draggable', true)
+          } else {
+            header.setAttribute('draggable', true)
+            DomHelper.addClass(headerParent, 'transparent-border')
+          }
 
           // ondragstart event
           headerParent.ondragstart = e => {
@@ -233,9 +244,14 @@ export default Component => {
                 // readjust dropIndex value for edge cases
                 // if dragging a column from left to right
                 if (this.dragged < dropIndex) {
-                  if (this.dropPosition === -1) { dropIndex = dropIndex - 1 }
-                } else { // dragging a column from right to left
-                  if (this.dropPosition === 1) { dropIndex = dropIndex + 1 }
+                  if (this.dropPosition === -1) {
+                    dropIndex = dropIndex - 1
+                  }
+                } else {
+                  // dragging a column from right to left
+                  if (this.dropPosition === 1) {
+                    dropIndex = dropIndex + 1
+                  }
                 }
 
                 this.reorder.push({ a: dropIndex, b: this.dragged })
@@ -365,17 +381,19 @@ export default Component => {
       // fire change event?
       if (!this.state.firstLoad) {
         const originalOrder = columns.map(col => {
-          if (col.accessor === 'function') return col.id
+          if (typeof col.accessor === 'function') return col.id
           return col.accessor
         })
 
         const newOrder = cols.map(col => {
-          if (col.accessor === 'function') return col.id
+          if (typeof col.accessor === 'function') return col.id
           return col.accessor
         })
 
         // if order is not equal, then call onDraggedColumnChange prop
-        if (JSON.stringify(originalOrder) !== JSON.stringify(newOrder)) { if (onDraggedColumnChange) onDraggedColumnChange(cols) }
+        if (JSON.stringify(originalOrder) !== JSON.stringify(newOrder)) {
+          if (onDraggedColumnChange) onDraggedColumnChange(cols)
+        }
       }
 
       // render
@@ -401,6 +419,7 @@ export default Component => {
   const defaultProps = {
     mode: DragMode.REORDER,
     draggable: [],
+    enableColumnWideDrag: true,
     disableTableScroll: false,
     overflow: 'auto',
     useDragImage: true,
@@ -416,6 +435,10 @@ export default Component => {
       mode: PropTypes.oneOf([DragMode.REORDER, DragMode.SWAP]).isRequired,
       /** array of column accessors to allow drag and drop */
       draggable: PropTypes.arrayOf(PropTypes.string),
+      /** if {true} then entire header column is draggable.  If {false} then only header column text is draggable.
+       * Set to {false} if you experience buggyness when using with react-table column sorting/resizing functionality
+       */
+      enableColumnWideDrag: PropTypes.bool,
       /** disable ReactTable horizontal/vertical scrolling when dragging a column */
       disableTableScroll: PropTypes.bool,
       /** used with disableTableScroll={true} to reset ReactTable overflow style onDragEnd event */

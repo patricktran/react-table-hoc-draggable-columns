@@ -28,6 +28,7 @@ stories
         draggableColumns={{
           mode: 'reorder',
           draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
+          enableColumnWideDrag: boolean('enableColumnWideDrag', true),
           disableTableScroll: boolean('disableTableScroll', true),
           useDragImage: boolean('useDragImage', true),
           onDraggedColumnChange: cols => console.log('new order', cols)
@@ -50,6 +51,7 @@ stories
         draggableColumns={{
           mode: 'swap',
           draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
+          enableColumnWideDrag: boolean('enableColumnWideDrag', true),
           disableTableScroll: boolean('disableTableScroll', true),
           useDragImage: boolean('useDragImage', true),
             onDraggedColumnChange: cols => console.log('new order', cols)

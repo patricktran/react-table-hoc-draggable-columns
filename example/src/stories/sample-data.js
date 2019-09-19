@@ -3,7 +3,7 @@ const carColumns = [
       Header: 'Vin',
       accessor: 'vin',
       width: 300,
-      sortable: false
+      sortable: true
     },
     {
       Header: 'Year',

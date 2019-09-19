@@ -15,10 +15,13 @@
     cursor: move;
   }
 
+  //support for enableColumnWideDrag set to true/false
+  div.transparent-border,
   div[draggable='true'] {
     border: 1px solid transparent;
   }
   //swap mode
+  div.transparent-border.rt-drag-enter-item,
   div[draggable='true'].rt-drag-enter-item {
     border: 1px dashed #777;
   }
