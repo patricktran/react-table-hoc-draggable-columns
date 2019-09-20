@@ -104,6 +104,7 @@ export default Component => {
               crt.className = dragImageClassName
               const columnWidth = DomHelper.getElementWidth(this.draggedColumn)
               const columnHeight = DomHelper.getElementHeight(this.draggedColumn)
+
               // calculate offset from draggedColumn element
               let xOffSet = Math.floor(columnWidth / 2)
               const yOffSet = Math.floor(columnHeight / 2)
@@ -135,6 +136,7 @@ export default Component => {
             e.stopPropagation()
             e.preventDefault()
             this.counter++
+
             if (DomHelper.stripHtml(e.target) !== this.draggedName) {
               const {
                 draggableColumns: {
@@ -200,6 +202,7 @@ export default Component => {
             e.preventDefault()
 
             this.counter--
+
             const {
               draggableColumns: {
                 mode = defaultProps.mode,
@@ -208,8 +211,10 @@ export default Component => {
             } = this.props
 
             if (mode === DragMode.REORDER) {
-              this.reorderIndicatorUp.style.display = 'none'
-              this.reorderIndicatorDown.style.display = 'none'
+              if (this.counter === 0) {
+                this.reorderIndicatorUp.style.display = 'none'
+                this.reorderIndicatorDown.style.display = 'none'
+              }
             } else if (mode === DragMode.SWAP) {
               if (this.counter === 0 && onDragEnterClassName) {
                 const dropHeader = this.findParentHeader(e.target)
@@ -321,7 +326,9 @@ export default Component => {
       const {
         draggable = defaultProps.draggable,
         mode = defaultProps.mode,
-        onDraggedColumnChange
+        onDraggedColumnChange,
+        reorderIndicatorUpClassName = defaultProps.reorderIndicatorUpClassName,
+        reorderIndicatorDownClassName = defaultProps.reorderIndicatorDownClassName
       } = draggableColumns
 
       let reorderIndicatorUp = (
@@ -329,7 +336,7 @@ export default Component => {
           ref={el => {
             this.reorderIndicatorUp = el
           }}
-          className='arrow arrow-bar is-top'
+          className={`arrow arrow-bar is-top ${reorderIndicatorUpClassName}`}
           style={{ position: 'absolute', display: 'none' }}
         />
       )
@@ -339,7 +346,7 @@ export default Component => {
           ref={el => {
             this.reorderIndicatorDown = el
           }}
-          className='arrow arrow-bar is-bottom'
+          className={`arrow arrow-bar is-bottom ${reorderIndicatorDownClassName}`}
           style={{ position: 'absolute', display: 'none' }}
         />
       )
@@ -424,7 +431,9 @@ export default Component => {
     overflow: 'auto',
     useDragImage: true,
     dragImageClassName: 'rt-dragged-item',
-    onDragEnterClassName: 'rt-drag-enter-item'
+    onDragEnterClassName: 'rt-drag-enter-item',
+    reorderIndicatorUpClassName: '',
+    reorderIndicatorDownClassName: ''
   }
 
   wrapper.displayName = 'RTDraggableColumn'
@@ -450,7 +459,11 @@ export default Component => {
       /** Swap mode only - css class */
       onDragEnterClassName: PropTypes.string,
       /** callback method to be notified when column order changes - signature: function(columns)  */
-      onDraggedColumnChange: PropTypes.func
+      onDraggedColumnChange: PropTypes.func,
+      /** additional className for reorder indicator Up */
+      reorderIndicatorUpClassName: PropTypes.string,
+      /** additional className for reorder indicator Down */
+      reorderIndicatorDownClassName: PropTypes.string
     })
   }
 

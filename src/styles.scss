@@ -11,6 +11,11 @@
     outline: none;
   }
 
+  //add a little padding around header text to enlarge hover hotspot
+  span.draggable-header.enable-drag {
+    padding: 2px 8px;
+  }
+
   .draggable-header.enable-drag:hover {
     cursor: move;
   }
@@ -20,6 +25,7 @@
   div[draggable='true'] {
     border: 1px solid transparent;
   }
+
   //swap mode
   div.transparent-border.rt-drag-enter-item,
   div[draggable='true'].rt-drag-enter-item {
