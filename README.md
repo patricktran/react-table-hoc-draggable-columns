@@ -71,8 +71,8 @@ render () {
 | `dragImageClassName`            | dragImageClassName only applies when useDragImage={true}                                | `rt-dragged-item`    | string           |          |
 | `onDragEnterClassName`          | when mode={'swap'} - css class applied on dragged over column                           | `rt-drag-enter-item` | string           |          |
 | `onDraggedColumnChange`         | callback method to be notified when column order changes - signature: function(columns) |                      | function         |          |
-| `reorderIndicatorUpClassName`   | additional className for reorder indicator Up                                           |                      | function         |          |
-| `reorderIndicatorDownClassName` | additional className for reorder indicator Down                                         |                      | function         |          |
+| `reorderIndicatorUpClassName`   | additional className for reorder indicator Up                                           |                      | string           |          |
+| `reorderIndicatorDownClassName` | additional className for reorder indicator Down                                         |                      | string           |          |
 
 ## License
 
