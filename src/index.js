@@ -170,6 +170,15 @@ export default Component => {
                 const targetLeft = dropHeaderOffset.left - containerOffset.left
                 const columnCenter = dropHeaderOffset.left + dropHeader.offsetWidth / 2
 
+                const tableBodyBoundingRec = DomHelper.findFirstChildWithClassName(
+                  this.containerRef.current,
+                  'rt-table'
+                ).getBoundingClientRect()
+
+                // determine current table viewport
+                const maxVisibleXPos = tableBodyBoundingRec.right
+                const minVisibleXPos = 0 - Math.ceil(this.iconWidth / 2)
+
                 this.reorderIndicatorUp.style.top =
                   dropHeaderOffset.top - containerOffset.top - (this.iconHeight + 3) + 'px'
 
@@ -187,13 +196,23 @@ export default Component => {
                     targetLeft - Math.ceil(this.iconWidth / 2) + 'px'
                   this.reorderIndicatorDown.style.left =
                     targetLeft - Math.ceil(this.iconWidth / 2) + 'px'
+
                   this.dropPosition = -1
                 }
 
-                this.reorderIndicatorUp.style.display = 'block'
-                this.reorderIndicatorDown.style.display = 'block'
-                this.reorderIndicatorUp.style.zIndex = 50
-                this.reorderIndicatorDown.style.zIndex = 50
+                // console.log(DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left), minVisibleXPos, Math.ceil(this.iconWidth / 2))
+
+                if (DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) > maxVisibleXPos ||
+                DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) < minVisibleXPos) {
+                  // do not show indicators if position is outside leftmost or rightmost bounds of the react table
+                  this.reorderIndicatorUp.style.display = 'none'
+                  this.reorderIndicatorDown.style.display = 'none'
+                } else {
+                  this.reorderIndicatorUp.style.display = 'block'
+                  this.reorderIndicatorDown.style.display = 'block'
+                  this.reorderIndicatorUp.style.zIndex = 50
+                  this.reorderIndicatorDown.style.zIndex = 50
+                }
               }
             }
           }
