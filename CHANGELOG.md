@@ -1,4 +1,4 @@
-# 1.1.5 (2019-09-23)
+# 1.1.6 (2019-09-23)
 
 Bug fix for reorder indicators flickering when dragleave event fired when hovering over a child element
 
