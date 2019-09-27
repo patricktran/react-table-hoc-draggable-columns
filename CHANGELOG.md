@@ -1,3 +1,7 @@
+# 1.2.0
+
+New prop `onDropSuccess` callback to obtain column information and indexes for the ondrop event
+
 # 1.1.6 (2019-09-23)
 
 Bug fix for reorder indicators flickering when dragleave event fired when hovering over a child element

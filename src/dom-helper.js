@@ -49,6 +49,10 @@ const findFirstChildWithClassName = (element, className) => {
   return null
 }
 
+const findChildrenWithClassName = (parentElement, className) => {
+  return parentElement.getElementsByClassName(className)
+}
+
 const getHiddenElementOuterHeight = element => {
   element.style.visibility = 'hidden'
   element.style.display = 'block'
@@ -106,6 +110,7 @@ export default {
   getHiddenElementOuterHeight,
   getHiddenElementOuterWidth,
   findFirstChildWithClassName,
+  findChildrenWithClassName,
   getElementWidth,
   getElementHeight
 }

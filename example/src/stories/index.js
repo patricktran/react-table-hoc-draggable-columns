@@ -4,14 +4,14 @@ import { storiesOf } from '@storybook/react';
 import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import withDraggableColumns from 'react-table-hoc-draggable-columns';
+import withDraggableColumns, { DragMode } from 'react-table-hoc-draggable-columns';
 import 'react-table-hoc-draggable-columns/dist/styles.css';
 
 import SampleData from './sample-data';
 
 const stories = storiesOf('ReactTableDraggableColumns', module);
 stories.addDecorator(withKnobs);
-stories.addDecorator(storyFn => <div style={{ marginTop: '30px' }}>{storyFn()}</div>)
+stories.addDecorator(storyFn => <div style={{ marginTop: '30px' }}>{storyFn()}</div>);
 stories
   .add('Reorder Columns', () => {
     const ReactTableDraggableColumns = withDraggableColumns(ReactTable);
@@ -26,12 +26,15 @@ stories
         data={SampleData.carData}
         showPagination={false}
         draggableColumns={{
-          mode: 'reorder',
+          mode: DragMode.REORDER,
           draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
           enableColumnWideDrag: boolean('enableColumnWideDrag', true),
           disableTableScroll: boolean('disableTableScroll', true),
           useDragImage: boolean('useDragImage', true),
-          onDraggedColumnChange: cols => console.log('new order', cols)
+          onDraggedColumnChange: cols => console.log('new order', cols),
+          onDropSuccess: (draggedColumn, targetColumn, oldIndex, newIndex) => {
+            console.log(draggedColumn, targetColumn, oldIndex, newIndex);
+          }
         }}
       />
     );
@@ -49,12 +52,15 @@ stories
         data={SampleData.carData}
         showPagination={false}
         draggableColumns={{
-          mode: 'swap',
+          mode: DragMode.SWAP,
           draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
           enableColumnWideDrag: boolean('enableColumnWideDrag', true),
           disableTableScroll: boolean('disableTableScroll', true),
           useDragImage: boolean('useDragImage', true),
-            onDraggedColumnChange: cols => console.log('new order', cols)
+          onDraggedColumnChange: cols => console.log('new order', cols),
+          onDropSuccess: (draggedColumn, targetColumn, oldIndex, newIndex) => {
+            console.log(draggedColumn, targetColumn, oldIndex, newIndex);
+          }
         }}
       />
     );

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import DomHelper from './dom-helper'
 import './styles.scss'
 
-const DragMode = {
+export const DragMode = {
   REORDER: 'reorder',
   SWAP: 'swap'
 }
@@ -17,6 +17,7 @@ export default Component => {
     }
 
     containerRef = React.createRef();
+    currentColumnOrder = [];
 
     constructor(props) {
       super(props)
@@ -44,7 +45,10 @@ export default Component => {
     // end helper methods
 
     createDragEvents() {
-      const headers = Array.prototype.slice.call(document.querySelectorAll('.draggable-header'))
+      const headers = DomHelper.findChildrenWithClassName(
+        this.containerRef.current,
+        'draggable-header'
+      )
 
       headers.forEach((header, i) => {
         // only allow drag events on drag enabled columns
@@ -52,9 +56,7 @@ export default Component => {
           const headerParent = header.parentNode
 
           const {
-            draggableColumns: {
-              enableColumnWideDrag = defaultProps.enableColumnWideDrag
-            }
+            draggableColumns: { enableColumnWideDrag = defaultProps.enableColumnWideDrag }
           } = this.props
 
           if (enableColumnWideDrag) {
@@ -200,10 +202,8 @@ export default Component => {
                   this.dropPosition = -1
                 }
 
-                // console.log(DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left), minVisibleXPos, Math.ceil(this.iconWidth / 2))
-
                 if (DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) > maxVisibleXPos ||
-                DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) < minVisibleXPos) {
+                  DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) < minVisibleXPos) {
                   // do not show indicators if position is outside leftmost or rightmost bounds of the react table
                   this.reorderIndicatorUp.style.display = 'none'
                   this.reorderIndicatorDown.style.display = 'none'
@@ -247,7 +247,7 @@ export default Component => {
             e.preventDefault()
 
             const {
-              draggableColumns: { mode = defaultProps.mode }
+              draggableColumns: { mode = defaultProps.mode, onDropSuccess }
             } = this.props
 
             if (mode === DragMode.REORDER) {
@@ -280,11 +280,31 @@ export default Component => {
 
                 this.reorder.push({ a: dropIndex, b: this.dragged })
 
+                if (onDropSuccess) {
+                  // (draggedColumn, targetColumn, oldIndex, newIndex)
+                  onDropSuccess(
+                    this.currentColumnOrder[this.dragged],
+                    this.currentColumnOrder[dropIndex],
+                    this.dragged,
+                    dropIndex
+                  )
+                }
+
                 // trigger a re-render
                 this.setState({ trigger: Math.random(), firstLoad: false })
               }
             } else if (mode === DragMode.SWAP) {
               this.reorder.push({ a: i, b: this.dragged })
+
+              if (onDropSuccess) {
+                // (draggedColumn, targetColumn, oldIndex, newIndex)
+                onDropSuccess(
+                  this.currentColumnOrder[this.dragged],
+                  this.currentColumnOrder[i],
+                  this.dragged,
+                  i
+                )
+              }
 
               // trigger a re-render
               this.setState({ trigger: Math.random(), firstLoad: false })
@@ -404,6 +424,9 @@ export default Component => {
         this.reorder.forEach(o => cols.splice(o.a, 0, cols.splice(o.b, 1)[0]))
       }
 
+      // track final column order
+      this.currentColumnOrder = cols
+
       // fire change event?
       if (!this.state.firstLoad) {
         const originalOrder = columns.map(col => {
@@ -477,6 +500,8 @@ export default Component => {
       dragImageClassName: PropTypes.string,
       /** Swap mode only - css class */
       onDragEnterClassName: PropTypes.string,
+      /** callback method to be notified when on column drop success - signature: function(draggedColumn, targetColumn, oldIndex, newIndex)  */
+      onDropSuccess: PropTypes.func,
       /** callback method to be notified when column order changes - signature: function(columns)  */
       onDraggedColumnChange: PropTypes.func,
       /** additional className for reorder indicator Up */
@@ -488,3 +513,6 @@ export default Component => {
 
   return wrapper
 }
+
+// todo - additionalDropZones prop?  For columns that aren't draggable to but you want to allow other columns to be reordered before or after it?
+// (reorder mode only, doesn't make sense for swap mode)
