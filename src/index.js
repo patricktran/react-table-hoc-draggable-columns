@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DomHelper from './dom-helper'
 import './styles.scss'
+import uniqid from 'uniqid';
 
 const DragMode = {
   REORDER: 'reorder',
@@ -26,6 +27,7 @@ export default Component => {
         trigger: 0,
         firstLoad: true
       }
+      this.uniqClassName = this.props.uniqClassName || uniqid('rthdc-');
     }
 
     // helper methods
@@ -44,7 +46,7 @@ export default Component => {
     // end helper methods
 
     createDragEvents() {
-      const headers = Array.prototype.slice.call(document.querySelectorAll('.draggable-header'))
+      const headers = Array.prototype.slice.call(document.querySelectorAll(`.${this.uniqClassName} .draggable-header`))
 
       headers.forEach((header, i) => {
         // only allow drag events on drag enabled columns
@@ -434,6 +436,7 @@ export default Component => {
             draggableColumns={draggableColumns}
             columns={cols}
             ref={r => (this.wrappedInstance = r)}
+            className={this.uniqClassName}
           />
           {reorderIndicatorUp}
           {reorderIndicatorDown}

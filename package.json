@@ -67,6 +67,7 @@
     "draggable columns"
   ],
   "dependencies": {
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.12.0",
+    "uniqid": "^5.0.3"
   }
 }
