@@ -60,19 +60,20 @@ render () {
 
 ## draggableColumns Prop
 
-| Property                        | Description                                                                             | Default value        | Type             | Required |
-| ------------------------------- | --------------------------------------------------------------------------------------- | -------------------- | ---------------- | -------- |
-| `mode`                          | mode to either 'reorder' the column or 'swap' column position on drop                   | 'reorder'            | string           | yes      |
-| `draggable`                     | array of column accessors to allow drag and drop                                        |                      | array of strings |          |
-| `enableColumnWideDrag`          | when {true} entire column is draggable. when {false} only header text is draggable      | true                 | bool             |          |
-| `disableTableScroll`            | disable ReactTable horizontal/vertical scrolling when dragging a column                 | false                | bool             |          |
-| `overflow`                      | used with disableTableScroll={true} to reset ReactTable overflow style onDragEnd event  | `auto`               | string           |          |
-| `useDragImage`                  | clone dragged column element? useful for applying a different css class.                | true                 | bool             |          |
-| `dragImageClassName`            | dragImageClassName only applies when useDragImage={true}                                | `rt-dragged-item`    | string           |          |
-| `onDragEnterClassName`          | when mode={'swap'} - css class applied on dragged over column                           | `rt-drag-enter-item` | string           |          |
-| `onDraggedColumnChange`         | callback method to be notified when column order changes - signature: function(columns) |                      | function         |          |
-| `reorderIndicatorUpClassName`   | additional className for reorder indicator Up                                           |                      | string           |          |
-| `reorderIndicatorDownClassName` | additional className for reorder indicator Down                                         |                      | string           |          |
+| Property                        | Description                                                                                                                                             | Default value        | Type             | Required |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ---------------- | -------- |
+| `mode`                          | mode to either 'reorder' the column or 'swap' column position on drop                                                                                   | 'reorder'            | string           | yes      |
+| `draggable`                     | array of column accessors to allow drag and drop                                                                                                        |                      | array of strings |          |
+| `enableColumnWideDrag`          | when {true} entire column is draggable. when {false} only header text is draggable                                                                      | true                 | bool             |          |
+| `disableTableScroll`            | disable ReactTable horizontal/vertical scrolling when dragging a column                                                                                 | false                | bool             |          |
+| `overflow`                      | used with disableTableScroll={true} to reset ReactTable overflow style onDragEnd event                                                                  | `auto`               | string           |          |
+| `useDragImage`                  | clone dragged column element? useful for applying a different css class.                                                                                | true                 | bool             |          |
+| `dragImageClassName`            | dragImageClassName only applies when useDragImage={true}                                                                                                | `rt-dragged-item`    | string           |          |
+| `onDragEnterClassName`          | when mode={'swap'} - css class applied on dragged over column                                                                                           | `rt-drag-enter-item` | string           |          |
+| `onDraggedColumnChange`         | callback method to be notified when column order changes - signature: function(columns)                                                                 |                      | function         |          |
+| `onDropSuccess`                 | callback method to be notified when on column drop success - signature: function(draggedColumn, targetColumn, oldIndex, newIndex, oldOffset, newOffset) |                      | function         |          |
+| `reorderIndicatorUpClassName`   | additional className for reorder indicator Up                                                                                                           |                      | string           |          |
+| `reorderIndicatorDownClassName` | additional className for reorder indicator Down                                                                                                         |                      | string           |          |
 
 ## License
 

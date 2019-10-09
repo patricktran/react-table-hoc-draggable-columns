@@ -1,6 +1,9 @@
+import React from 'react';
+import { ReactComponent as CheckMark } from './check-bold.svg';
+
 const carColumns = [
     {
-      Header: 'Vin',
+      Header: (<div>Vin <CheckMark/></div>),
       accessor: 'vin',
       width: 300,
       sortable: true

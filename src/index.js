@@ -8,6 +8,25 @@ export const DragMode = {
   SWAP: 'swap'
 }
 
+/**
+ * Generate UuId
+ * */
+const generateUuid = () => {
+  let uuid = ''
+  let i
+  let random
+  for (i = 0; i < 32; i++) {
+    random = (Math.random() * 16) | 0
+
+    if (i === 8 || i === 12 || i === 16 || i === 20) {
+      uuid += '-'
+    }
+    uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(16)
+  }
+
+  return uuid
+}
+
 export default Component => {
   const wrapper = class RTFixedDraggableColumn extends React.Component {
     getWrappedInstance() {
@@ -27,6 +46,8 @@ export default Component => {
         trigger: 0,
         firstLoad: true
       }
+
+      this.uniqueId = generateUuid()
     }
 
     // helper methods
@@ -47,7 +68,7 @@ export default Component => {
     createDragEvents() {
       const headers = DomHelper.findChildrenWithClassName(
         this.containerRef.current,
-        'draggable-header'
+        `${this.uniqueId} draggable-header`
       )
 
       headers.forEach((header, i) => {
@@ -158,6 +179,9 @@ export default Component => {
           headerParent.ondragover = e => {
             e.preventDefault()
 
+            // prevent bug when using multiple react tables
+            if (!this.draggedColumn) return
+
             const {
               draggableColumns: { mode = defaultProps.mode }
             } = this.props
@@ -202,8 +226,12 @@ export default Component => {
                   this.dropPosition = -1
                 }
 
-                if (DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) > maxVisibleXPos ||
-                  DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) < minVisibleXPos) {
+                if (
+                  DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) >
+                    maxVisibleXPos ||
+                  DomHelper.parseStrDimensionToInt(this.reorderIndicatorUp.style.left) <
+                    minVisibleXPos
+                ) {
                   // do not show indicators if position is outside leftmost or rightmost bounds of the react table
                   this.reorderIndicatorUp.style.display = 'none'
                   this.reorderIndicatorDown.style.display = 'none'
@@ -246,6 +274,9 @@ export default Component => {
           headerParent.ondrop = e => {
             e.preventDefault()
 
+            // prevent bug when using multiple react tables
+            if (!this.draggedColumn) return
+
             const {
               draggableColumns: { mode = defaultProps.mode, onDropSuccess }
             } = this.props
@@ -281,12 +312,25 @@ export default Component => {
                 this.reorder.push({ a: dropIndex, b: this.dragged })
 
                 if (onDropSuccess) {
-                  // (draggedColumn, targetColumn, oldIndex, newIndex)
+                  const containerOffset = DomHelper.getOffset(this.containerRef.current)
+
+                  // adjust offSets to be respective to the containerOffset
+                  const oldOffset = DomHelper.getOffset(this.draggedColumn)
+                  oldOffset.top = oldOffset.top - containerOffset.top
+                  oldOffset.left = oldOffset.left - containerOffset.left
+
+                  const newOffset = DomHelper.getOffset(this.findParentHeader(e.target))
+                  newOffset.top = newOffset.top - containerOffset.top
+                  newOffset.left = newOffset.left - containerOffset.left
+
+                  // (draggedColumn, targetColumn, oldIndex, newIndex, oldOffset, newOffset)
                   onDropSuccess(
                     this.currentColumnOrder[this.dragged],
                     this.currentColumnOrder[dropIndex],
                     this.dragged,
-                    dropIndex
+                    dropIndex,
+                    oldOffset,
+                    newOffset
                   )
                 }
 
@@ -391,7 +435,7 @@ export default Component => {
       )
 
       const cols = columns.map(col => {
-        let headerClassName = 'draggable-header'
+        let headerClassName = `${this.uniqueId} draggable-header`
 
         // add additional className if column is draggable enabled
         if (
@@ -405,13 +449,13 @@ export default Component => {
           ...col,
           Header:
             typeof col.Header === 'function' ? (
-              <span onClick={this.stopPropagation} className={headerClassName}>
+              <div onClick={this.stopPropagation} className={headerClassName}>
                 {col.Header()}
-              </span>
+              </div>
             ) : (
-              <span onClick={this.stopPropagation} className={headerClassName}>
+              <div onClick={this.stopPropagation} className={headerClassName}>
                 {col.Header}
-              </span>
+              </div>
             )
         }
       })
@@ -500,7 +544,7 @@ export default Component => {
       dragImageClassName: PropTypes.string,
       /** Swap mode only - css class */
       onDragEnterClassName: PropTypes.string,
-      /** callback method to be notified when on column drop success - signature: function(draggedColumn, targetColumn, oldIndex, newIndex)  */
+      /** callback method to be notified when on column drop success - signature: function(draggedColumn, targetColumn, oldIndex, newIndex, oldOffset, newOffset)  */
       onDropSuccess: PropTypes.func,
       /** callback method to be notified when column order changes - signature: function(columns)  */
       onDraggedColumnChange: PropTypes.func,
@@ -513,6 +557,3 @@ export default Component => {
 
   return wrapper
 }
-
-// todo - additionalDropZones prop?  For columns that aren't draggable to but you want to allow other columns to be reordered before or after it?
-// (reorder mode only, doesn't make sense for swap mode)

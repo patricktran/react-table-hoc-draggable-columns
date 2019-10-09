@@ -1,6 +1,8 @@
 # 1.2.0
 
-New prop `onDropSuccess` callback to obtain column information and indexes for the ondrop event
+New prop `onDropSuccess` callback to obtain column information and indexes for the ondrop event (probably more info than you want to know!)
+
+Breaking Change: Headers are now wrapped by a `div` rather than `span`. This was necessary to support column.header defined as a component
 
 # 1.1.6 (2019-09-23)
 
