@@ -1,4 +1,4 @@
-# 1.2.0
+# 1.2.0 (2019-10-9)
 
 New prop `onDropSuccess` callback to obtain column information and indexes for the ondrop event (probably more info than you want to know!)
 
