@@ -1,3 +1,7 @@
+# 1.2.1 (2019-10-9)
+
+Bug fix for correctly converting a HTML Collection to Javascript array (was broken for some browsers)
+
 # 1.2.0 (2019-10-9)
 
 New prop `onDropSuccess` callback to obtain column information and indexes for the ondrop event (probably more info than you want to know!)

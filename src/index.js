@@ -66,10 +66,13 @@ export default Component => {
     // end helper methods
 
     createDragEvents() {
-      const headers = DomHelper.findChildrenWithClassName(
+      const headersCollection = DomHelper.findChildrenWithClassName(
         this.containerRef.current,
         `${this.uniqueId} draggable-header`
       )
+
+      // convert HTML collection to Javascript array
+      const headers = [...headersCollection]
 
       headers.forEach((header, i) => {
         // only allow drag events on drag enabled columns
