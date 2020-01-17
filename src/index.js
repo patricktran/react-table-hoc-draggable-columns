@@ -452,11 +452,11 @@ export default Component => {
           ...col,
           Header:
             typeof col.Header === 'function' ? (
-              <div onClick={this.stopPropagation} className={headerClassName}>
+              <div className={headerClassName}>
                 {col.Header()}
               </div>
             ) : (
-              <div onClick={this.stopPropagation} className={headerClassName}>
+              <div className={headerClassName}>
                 {col.Header}
               </div>
             )

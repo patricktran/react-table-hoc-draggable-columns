@@ -16,6 +16,11 @@
     padding: 2px 8px;
   }
 
+  //css for when `enableColumnWideDrag` prop is set to {false}
+  div[draggable='true'].draggable-header.enable-drag {
+    display: inline-flex;
+  }
+
   .draggable-header.enable-drag:hover {
     cursor: move;
   }

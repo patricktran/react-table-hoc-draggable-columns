@@ -27,7 +27,7 @@ stories.add('Reorder Columns', () => {
       draggableColumns={{
         mode: DragMode.REORDER,
         draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
-        enableColumnWideDrag: boolean('enableColumnWideDrag', true),
+        enableColumnWideDrag: boolean('enableColumnWideDrag', false),
         disableTableScroll: boolean('disableTableScroll', true),
         useDragImage: boolean('useDragImage', true),
         onDraggedColumnChange: cols => console.log('new order', cols),

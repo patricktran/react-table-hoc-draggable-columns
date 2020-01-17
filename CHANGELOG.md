@@ -1,3 +1,8 @@
+# 1.2.2 (2020-1-17)
+
+Bug fix that prevented sorting on a draggable column
+Bug fix for `enableColumnWideDrag` prop by adding css `display: inline-flex` when set to {false}
+
 # 1.2.1 (2019-10-9)
 
 Bug fix for correctly converting a HTML Collection to Javascript array (was broken for some browsers)
