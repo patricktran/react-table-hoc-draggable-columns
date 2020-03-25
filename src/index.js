@@ -531,7 +531,7 @@ export default Component => {
     draggableColumns: PropTypes.shape({
       /** mode to either reorder the column or swap column position on drop */
       mode: PropTypes.oneOf([DragMode.REORDER, DragMode.SWAP]).isRequired,
-      /** array of column accessors to allow drag and drop */
+      /** array of string-based column accessors or column ids (when using a custom accessor) to allow drag and drop */
       draggable: PropTypes.arrayOf(PropTypes.string),
       /** if {true} then entire header column is draggable.  If {false} then only header column text is draggable.
        * Set to {false} if you experience buggyness when using with react-table column sorting/resizing functionality
