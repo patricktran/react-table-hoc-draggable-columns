@@ -21,6 +21,11 @@ const index = element => {
   return -1
 }
 
+const getAttribute = (element, attributeName) => {
+  console.log('getattr', element)
+  return element.getAttribute(attributeName)
+}
+
 const addClass = (element, className) => {
   if (element.classList) element.classList.add(className)
   else element.className += ' ' + className
@@ -104,6 +109,7 @@ export default {
   parseStrDimensionToInt,
   getOffset,
   index,
+  getAttribute,
   addClass,
   removeClass,
   hasClass,

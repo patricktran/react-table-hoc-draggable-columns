@@ -52,15 +52,24 @@ export default Component => {
 
     // helper methods
     findParentHeader(element) {
-      if (element.className.includes('rt-th')) {
+      // need to check typeof to avoid errors when traversing special elements like SVGs
+      if (element.className && typeof element.className === 'string' && element.className.includes('rt-th')) {
         return element
       } else {
         let parent = element.parentElement
-        while (!parent.className.includes('rt-th')) {
+        while (typeof parent.className !== 'string' || !parent.className.includes('rt-th')) {
           parent = parent.parentElement
           if (!parent) break
         }
         return parent
+      }
+    }
+
+    getFirstChildWithColumnIndexAttributeValue(element) {
+      const header = DomHelper.findFirstChildWithClassName(element, 'draggable-header')
+
+      if (header) {
+        return DomHelper.getAttribute(header, 'data-column-index')
       }
     }
     // end helper methods
@@ -288,6 +297,10 @@ export default Component => {
               // only move if the dragged column is meets position threshold
               let dragIndex = DomHelper.index(this.draggedColumn)
               let dropIndex = DomHelper.index(this.findParentHeader(e.target))
+
+              // for the future
+              // this.getFirstChildWithColumnIndexAttributeValue(this.draggedColumn)
+
               let allowDrop = dragIndex !== dropIndex
 
               if (
@@ -311,6 +324,8 @@ export default Component => {
                     dropIndex = dropIndex + 1
                   }
                 }
+
+                console.log('ddropIndex', dropIndex, 'this.dragged', this.dragged)
 
                 this.reorder.push({ a: dropIndex, b: this.dragged })
 
@@ -408,7 +423,7 @@ export default Component => {
     };
 
     render() {
-      const { columns, draggableColumns, ...rest } = this.props
+      const { columns: origColumns, draggableColumns, ...rest } = this.props
       const {
         draggable = defaultProps.draggable,
         mode = defaultProps.mode,
@@ -437,7 +452,15 @@ export default Component => {
         />
       )
 
-      const cols = columns.map(col => {
+      // separate out visible and hidden columns
+      const visibleColumns = origColumns.filter(col => col.show === true || col.show === undefined)
+      const hiddenColumns = origColumns.filter(col => col.show === false)
+
+      // place hidden columns at very end of array
+      // having a hidden column inbetween two draggable columns will cause this HOC to improperly calculate the new column index positions
+      const adjustedOrigColumns = [...visibleColumns, ...hiddenColumns]
+
+      const cols = adjustedOrigColumns.map((col, index) => {
         let headerClassName = `${this.uniqueId} draggable-header`
 
         // add additional className if column is draggable enabled
@@ -452,16 +475,18 @@ export default Component => {
           ...col,
           Header:
             typeof col.Header === 'function' ? (
-              <div className={headerClassName}>
+              <div className={headerClassName} data-column-index={index}>
                 {col.Header()}
               </div>
             ) : (
-              <div className={headerClassName}>
+              <div className={headerClassName} data-column-index={index}>
                 {col.Header}
               </div>
             )
         }
       })
+
+      const previousOrder = [...this.currentColumnOrder]
 
       // run all reorder events
       if (mode && mode === DragMode.SWAP) {
@@ -476,7 +501,7 @@ export default Component => {
 
       // fire change event?
       if (!this.state.firstLoad) {
-        const originalOrder = columns.map(col => {
+        const originalOrder = previousOrder.map(col => {
           if (typeof col.accessor === 'function') return col.id
           return col.accessor
         })

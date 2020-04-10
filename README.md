@@ -58,6 +58,12 @@ render () {
 }
 ```
 
+## Special Considerations
+
+If any of your React Table columns are hidden (show: false), this HOC will automatically move those columns to the end of the list. This is to prevent hidden columns from causing this HOC from improperly calculating the new column order.
+
+ReactTable Columns Props [https://github.com/tannerlinsley/react-table/tree/v6.10.0#columns]
+
 ## draggableColumns Prop
 
 | Property                        | Description                                                                                                                                             | Default value        | Type             | Required |

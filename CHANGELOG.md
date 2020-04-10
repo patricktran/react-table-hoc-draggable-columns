@@ -1,3 +1,8 @@
+# 1.2.3 (2020-4-10)
+
+Bug fix that prevented `onDraggedColumnChange` from being called if columns dragged back to their original order
+Bug fix for column re-ordering not working if any of the React Table columns have `show: false` defined
+
 # 1.2.2 (2020-1-17)
 
 Bug fix that prevented sorting on a draggable column
