@@ -22,7 +22,6 @@ const index = element => {
 }
 
 const getAttribute = (element, attributeName) => {
-  console.log('getattr', element)
   return element.getAttribute(attributeName)
 }
 
