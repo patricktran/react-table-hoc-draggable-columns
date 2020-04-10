@@ -325,8 +325,6 @@ export default Component => {
                   }
                 }
 
-                console.log('ddropIndex', dropIndex, 'this.dragged', this.dragged)
-
                 this.reorder.push({ a: dropIndex, b: this.dragged })
 
                 if (onDropSuccess) {
