@@ -1,3 +1,8 @@
+# 1.2.4 (2020-5-16)
+
+Cleanup - remove leftover console.logs
+Add scarf installation analytics 
+
 # 1.2.3 (2020-4-10)
 
 Bug fix that prevented `onDraggedColumnChange` from being called if columns dragged back to their original order

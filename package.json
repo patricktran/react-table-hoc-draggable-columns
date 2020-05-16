@@ -1,6 +1,6 @@
 {
   "name": "react-table-hoc-draggable-columns",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "ReactTable HOC for draggable columns",
   "author": "patricktran",
   "license": "MIT",
@@ -67,6 +67,7 @@
     "draggable columns"
   ],
   "dependencies": {
+    "@scarf/scarf": "^1.0.5",
     "node-sass": "^4.12.0"
   }
 }
