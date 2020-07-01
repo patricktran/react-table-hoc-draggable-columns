@@ -1,3 +1,7 @@
+# 1.2.5 (2020-6-30)
+
+Remove scarf
+
 # 1.2.4 (2020-5-16)
 
 Cleanup - remove leftover console.logs
