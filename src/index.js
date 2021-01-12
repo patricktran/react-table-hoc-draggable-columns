@@ -427,7 +427,8 @@ export default Component => {
         mode = defaultProps.mode,
         onDraggedColumnChange,
         reorderIndicatorUpClassName = defaultProps.reorderIndicatorUpClassName,
-        reorderIndicatorDownClassName = defaultProps.reorderIndicatorDownClassName
+        reorderIndicatorDownClassName = defaultProps.reorderIndicatorDownClassName,
+        shouldReorder = defaultProps.shouldReorder
       } = draggableColumns
 
       let reorderIndicatorUp = (
@@ -486,12 +487,14 @@ export default Component => {
 
       const previousOrder = [...this.currentColumnOrder]
 
-      // run all reorder events
-      if (mode && mode === DragMode.SWAP) {
-        this.reorder.forEach(o => (cols[o.a] = cols.splice(o.b, 1, cols[o.a])[0]))
-      } else {
-        // mode: reorder - default
-        this.reorder.forEach(o => cols.splice(o.a, 0, cols.splice(o.b, 1)[0]))
+      if (shouldReorder) {
+        // run all reorder events
+        if (mode && mode === DragMode.SWAP) {
+          this.reorder.forEach(o => (cols[o.a] = cols.splice(o.b, 1, cols[o.a])[0]))
+        } else {
+          // mode: reorder - default
+          this.reorder.forEach(o => cols.splice(o.a, 0, cols.splice(o.b, 1)[0]))
+        }
       }
 
       // track final column order
@@ -545,7 +548,8 @@ export default Component => {
     dragImageClassName: 'rt-dragged-item',
     onDragEnterClassName: 'rt-drag-enter-item',
     reorderIndicatorUpClassName: '',
-    reorderIndicatorDownClassName: ''
+    reorderIndicatorDownClassName: '',
+    shouldReorder: true
   }
 
   wrapper.displayName = 'RTDraggableColumn'
@@ -577,7 +581,9 @@ export default Component => {
       /** additional className for reorder indicator Up */
       reorderIndicatorUpClassName: PropTypes.string,
       /** additional className for reorder indicator Down */
-      reorderIndicatorDownClassName: PropTypes.string
+      reorderIndicatorDownClassName: PropTypes.string,
+      /** determines if a reorder should be issued. Defaults to true */
+      shouldReorder: PropTypes.bool
     })
   }
 
