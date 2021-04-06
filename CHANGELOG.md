@@ -1,3 +1,8 @@
+# 1.3.0 (2021-4-06)
+
+Refactor rendering process so that calling `setState` inside `onDraggedColumnChange` will not crash the HOC
+`onDraggedColumnChange` and `onDropSuccess` callback method arguments refer to the original column instance and not the modified draggable instance   
+
 # 1.2.5 (2020-6-30)
 
 Remove scarf

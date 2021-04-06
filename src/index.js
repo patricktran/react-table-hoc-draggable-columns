@@ -42,6 +42,7 @@ export default Component => {
       super(props)
       this.dragged = null
       this.reorder = []
+      this.colsNoExtraContainingDiv = []
       this.state = {
         trigger: 0,
         firstLoad: true
@@ -341,17 +342,14 @@ export default Component => {
 
                   // (draggedColumn, targetColumn, oldIndex, newIndex, oldOffset, newOffset)
                   onDropSuccess(
-                    this.currentColumnOrder[this.dragged],
-                    this.currentColumnOrder[dropIndex],
+                    this.colsNoExtraContainingDiv[this.dragged],
+                    this.colsNoExtraContainingDiv[dropIndex],
                     this.dragged,
                     dropIndex,
                     oldOffset,
                     newOffset
                   )
                 }
-
-                // trigger a re-render
-                this.setState({ trigger: Math.random(), firstLoad: false })
               }
             } else if (mode === DragMode.SWAP) {
               this.reorder.push({ a: i, b: this.dragged })
@@ -365,9 +363,6 @@ export default Component => {
                   i
                 )
               }
-
-              // trigger a re-render
-              this.setState({ trigger: Math.random(), firstLoad: false })
             }
 
             this.dragged = null
@@ -377,6 +372,8 @@ export default Component => {
             this.counter = 0
             this.reorderIndicatorUp.style.display = 'none'
             this.reorderIndicatorDown.style.display = 'none'
+            // trigger a re-render
+            this.setState({ trigger: Math.random(), firstLoad: false })
           }
 
           // ondragend event
@@ -412,6 +409,27 @@ export default Component => {
     }
 
     componentDidUpdate() {
+      const { onDraggedColumnChange } = this.props.draggableColumns
+      if (!this.state.firstLoad) {
+        const originalOrder = this.previousOrder.map((col) => {
+          if (typeof col.accessor === 'function') return col.id
+          return col.accessor
+        })
+
+        const newOrder = this.currentColumnOrder.map((col) => {
+          if (typeof col.accessor === 'function') return col.id
+          return col.accessor
+        })
+
+        // if order is not equal, then call onDraggedColumnChange prop
+        if (JSON.stringify(originalOrder) !== JSON.stringify(newOrder)) {
+          // pass back updated order of columns without added containing drag DIV
+          if (onDraggedColumnChange) {
+            onDraggedColumnChange(this.colsNoExtraContainingDiv)
+          }
+        }
+      }
+
       if (this.props.draggableColumns.draggable.length > 0) this.createDragEvents()
     }
 
@@ -425,7 +443,6 @@ export default Component => {
       const {
         draggable = defaultProps.draggable,
         mode = defaultProps.mode,
-        onDraggedColumnChange,
         reorderIndicatorUpClassName = defaultProps.reorderIndicatorUpClassName,
         reorderIndicatorDownClassName = defaultProps.reorderIndicatorDownClassName
       } = draggableColumns
@@ -457,7 +474,8 @@ export default Component => {
       // place hidden columns at very end of array
       // having a hidden column inbetween two draggable columns will cause this HOC to improperly calculate the new column index positions
       const adjustedOrigColumns = [...visibleColumns, ...hiddenColumns]
-
+      // shallow copy of columns without added containing drag DIV
+      this.colsNoExtraContainingDiv = [...adjustedOrigColumns]
       const cols = adjustedOrigColumns.map((col, index) => {
         let headerClassName = `${this.uniqueId} draggable-header`
 
@@ -484,22 +502,25 @@ export default Component => {
         }
       })
 
-      const previousOrder = [...this.currentColumnOrder]
+      //const previousOrder = [...this.currentColumnOrder]
+      this.previousOrder = [...this.currentColumnOrder]
 
       // run all reorder events
       if (mode && mode === DragMode.SWAP) {
         this.reorder.forEach(o => (cols[o.a] = cols.splice(o.b, 1, cols[o.a])[0]))
+        this.reorder.forEach(o => (this.colsNoExtraContainingDiv[o.a] = this.colsNoExtraContainingDiv.splice(o.b, 1, this.colsNoExtraContainingDiv[o.a])[0]))
       } else {
         // mode: reorder - default
         this.reorder.forEach(o => cols.splice(o.a, 0, cols.splice(o.b, 1)[0]))
+        this.reorder.forEach(o => this.colsNoExtraContainingDiv.splice(o.a, 0, this.colsNoExtraContainingDiv.splice(o.b, 1)[0]))
       }
 
       // track final column order
       this.currentColumnOrder = cols
 
       // fire change event?
-      if (!this.state.firstLoad) {
-        const originalOrder = previousOrder.map(col => {
+    /*  if (!this.state.firstLoad) {
+        const originalOrder = this.previousOrder.map(col => {
           if (typeof col.accessor === 'function') return col.id
           return col.accessor
         })
@@ -511,9 +532,10 @@ export default Component => {
 
         // if order is not equal, then call onDraggedColumnChange prop
         if (JSON.stringify(originalOrder) !== JSON.stringify(newOrder)) {
-          if (onDraggedColumnChange) onDraggedColumnChange(cols)
+          // pass back updated order of columns without added containing drag DIV
+          if (onDraggedColumnChange) onDraggedColumnChange(colsNoExtraContainingDiv)
         }
-      }
+      }*/
 
       // render
       return (
