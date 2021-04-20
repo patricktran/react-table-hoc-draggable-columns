@@ -1,4 +1,10 @@
-const stripHtml = element => element?.innerHTML?.replace(/<[^>]*>?/gm, '')
+const stripHtml = element => {
+  if (element && element.innerHTML) {
+    return element.innerHTML.replace(/<[^>]*>?/gm, '')
+  }
+
+  return null
+}
 
 const parseStrDimensionToInt = elementSize => parseInt(elementSize, 10)
 
@@ -46,10 +52,12 @@ const hasClass = (element, className) => {
 }
 
 const findFirstChildWithClassName = (element, className) => {
-  const matches = element?.getElementsByClassName(className)
+  if (element && element.getElementsByClassName) {
+    const matches = element.getElementsByClassName(className)
 
-  if (matches && matches.length > 0) {
-    return matches[0]
+    if (matches && matches.length > 0) {
+      return matches[0]
+    }
   }
 
   return null
