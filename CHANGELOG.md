@@ -1,3 +1,7 @@
+# 1.3.1 (2021-4-20)
+
+Maintenance release adding null/optional chaining checks 
+
 # 1.3.0 (2021-4-06)
 
 Refactor rendering process so that calling `setState` inside `onDraggedColumnChange` will not crash the HOC
