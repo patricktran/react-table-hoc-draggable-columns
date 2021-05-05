@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { withKnobs, text, boolean } from '@storybook/addon-knobs';
+import { withKnobs, boolean, array } from '@storybook/addon-knobs';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import withDraggableColumns, { DragMode } from 'react-table-hoc-draggable-columns';
@@ -26,7 +26,7 @@ stories.add('Reorder Columns', () => {
       showPagination={false}
       draggableColumns={{
         mode: DragMode.REORDER,
-        draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
+        draggable: array('draggable', ['vin', 'year', 'brand', 'color']),
         enableColumnWideDrag: boolean('enableColumnWideDrag', false),
         disableTableScroll: boolean('disableTableScroll', true),
         useDragImage: boolean('useDragImage', true),
@@ -54,7 +54,7 @@ stories
           showPagination={false}
           draggableColumns={{
             mode: DragMode.REORDER,
-            draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
+            draggable: array('draggable', ['vin', 'year', 'brand', 'color']),
             enableColumnWideDrag: boolean('enableColumnWideDrag', true),
             disableTableScroll: boolean('disableTableScroll', true),
             useDragImage: boolean('useDragImage', true),
@@ -82,7 +82,7 @@ stories
           showPagination={false}
           draggableColumns={{
             mode: DragMode.REORDER,
-            draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
+            draggable: array('draggable', ['vin', 'year', 'brand', 'color']),
             enableColumnWideDrag: boolean('enableColumnWideDrag', true),
             disableTableScroll: boolean('disableTableScroll', true),
             useDragImage: boolean('useDragImage', true),
@@ -116,7 +116,7 @@ stories
         showPagination={false}
         draggableColumns={{
           mode: DragMode.SWAP,
-          draggable: text('draggable', ['vin', 'year', 'brand', 'color']),
+          draggable: array('draggable', ['vin', 'year', 'brand', 'color']),
           enableColumnWideDrag: boolean('enableColumnWideDrag', true),
           disableTableScroll: boolean('disableTableScroll', true),
           useDragImage: boolean('useDragImage', true),

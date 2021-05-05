@@ -9,6 +9,9 @@
 .rt-draggable-container {
   .ReactTable .rt-thead .rt-th {
     outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   //add a little padding around header text to enlarge hover hotspot

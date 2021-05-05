@@ -1,11 +1,19 @@
+# 1.3.2 (2021-xx-xx)
+
+Bugfix - only call `onDraggedColumnChange` when column ordering is changed in ReactTable.
+We do not want to call `onDraggedColumnChange` if column order is changed outside of ReactTable... this may
+lead to an infinite loop depending on your use case.
+
+Update eslint/prettier config
+
 # 1.3.1 (2021-4-20)
 
-Maintenance release adding null/optional chaining checks 
+Maintenance release adding null/optional chaining checks
 
 # 1.3.0 (2021-4-06)
 
 Refactor rendering process so that calling `setState` inside `onDraggedColumnChange` will not crash the HOC
-`onDraggedColumnChange` and `onDropSuccess` callback method arguments refer to the original column instance and not the modified draggable instance   
+`onDraggedColumnChange` and `onDropSuccess` callback method arguments refer to the original column instance and not the modified draggable instance
 
 # 1.2.5 (2020-6-30)
 
@@ -14,7 +22,7 @@ Remove scarf
 # 1.2.4 (2020-5-16)
 
 Cleanup - remove leftover console.logs
-Add scarf installation analytics 
+Add scarf installation analytics
 
 # 1.2.3 (2020-4-10)
 

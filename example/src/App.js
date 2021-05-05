@@ -5,113 +5,31 @@ import withDraggableColumns, { DragMode } from 'react-table-hoc-draggable-column
 import 'react-table-hoc-draggable-columns/dist/styles.css';
 import { useState } from 'react';
 
-function shuffleArray(array) {
-  const resultArr = [...array];
-
-  for (var i = resultArr.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = resultArr[i];
-    resultArr[i] = resultArr[j];
-    resultArr[j] = temp;
-  }
-
-  return resultArr;
-}
-
-export default function App() {
-  const [columns, setColumns] = useState(carColumns);
-  const [draggable, setDraggable] = useState(['vin', 'year', 'brand', 'color']);
-
-  const removeColumn = () => {
-    setColumns(prevState => prevState.slice(1));
-  };
-
-  const removeDraggable = () => {
-    setDraggable(prevState => prevState.slice(1));
-  };
-
-  const randomOrderColumns = () => {
-    setColumns(shuffleArray(columns));
-  };
-
-  const ReactTableDraggableColumns = withDraggableColumns(ReactTable);
-
-  return (
-    <div className="App">
-      <button style={{ backgroundColor: 'red', color: 'white' }} onClick={removeColumn}>
-        Remove A Column
-      </button>
-      &nbsp;
-      <button style={{ backgroundColor: 'blue', color: 'white' }} onClick={removeDraggable}>
-        Remove A Draggable
-      </button>
-      &nbsp;
-      <button style={{ backgroundColor: 'green', color: 'white' }} onClick={randomOrderColumns}>
-        Reshuffle Columns
-      </button>
-      <br />
-      Draggable Columns: {draggable.join(', ')}
-      <br />
-      <ReactTableDraggableColumns
-        style={{
-          width: '98vw',
-          height: '500px'
-        }}
-        sortable={false}
-        columns={columns}
-        data={carData}
-        showPagination={false}
-        draggableColumns={{
-          mode: DragMode.REORDER,
-          draggable: draggable,
-          enableColumnWideDrag: false,
-          disableTableScroll: false,
-          useDragImage: true,
-          onDraggedColumnChange: cols => {
-            //update state
-            setColumns(cols)
-          },
-          onDropSuccess: (
-            draggedColumn,
-            targetColumn,
-            oldIndex,
-            newIndex,
-            oldOffset,
-            newOffset
-          ) => {
-            console.log(draggedColumn, targetColumn, oldIndex, newIndex, oldOffset, newOffset);
-          }
-        }}
-      />
-    </div>
-  );
-}
-
 const carColumns = [
   {
     Header: 'Vin',
     accessor: 'vin',
-    width: 300
+    width: 200
   },
   {
     Header: 'Year',
     accessor: 'year',
-    width: 500
+    width: 200
   },
   {
     Header: 'Brand',
     accessor: 'brand',
-    width: 500
+    width: 200
   },
   {
     Header: 'Color',
     accessor: 'color',
-    width: 500
+    width: 200
   },
   {
     Header: 'Price',
     accessor: 'price',
-    width: 500
+    width: 200
   }
 ];
 
@@ -467,3 +385,140 @@ const carData = [
     price: 50000
   }
 ];
+
+function shuffleArray(array) {
+  const resultArr = [...array];
+
+  for (var i = resultArr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = resultArr[i];
+    resultArr[i] = resultArr[j];
+    resultArr[j] = temp;
+  }
+
+  return resultArr;
+}
+
+class TableComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ReactTableDraggableColumns = withDraggableColumns(ReactTable);
+  }
+
+  render() {
+    const {
+      removeColumn,
+      randomOrderColumns,
+      setColumns,
+      columns,
+      draggable,
+      removeDraggable
+    } = this.props;
+
+    return (
+      <>
+        <button style={{ backgroundColor: 'red', color: 'white' }} onClick={removeColumn}>
+          Remove A Column
+        </button>
+        &nbsp;
+        <button style={{ backgroundColor: 'blue', color: 'white' }} onClick={removeDraggable}>
+          Remove A Draggable
+        </button>
+        &nbsp;
+        <button style={{ backgroundColor: 'green', color: 'white' }} onClick={randomOrderColumns}>
+          Reshuffle Columns
+        </button>
+        <br />
+        <strong>Draggable Columns: {draggable.join(', ')}</strong>
+        <br />
+        <this.ReactTableDraggableColumns
+          style={{
+            width: '98vw',
+            height: '500px'
+          }}
+          columns={columns}
+          data={carData}
+          showPagination={false}
+          draggableColumns={{
+            mode: DragMode.REORDER,
+            draggable: draggable,
+            enableColumnWideDrag: false,
+            disableTableScroll: false,
+            useDragImage: true,
+            onDraggedColumnChange: cols => setColumns(cols),
+            onDropSuccess: (
+              draggedColumn,
+              targetColumn,
+              oldIndex,
+              newIndex,
+              oldOffset,
+              newOffset
+            ) => {
+              /*console.log(
+            draggedColumn,
+            targetColumn,
+            oldIndex,
+            newIndex,
+            oldOffset,
+            newOffset
+          );*/
+            }
+          }}
+        />
+      </>
+    );
+  }
+}
+
+function ColumnOrderList({ columns, randomOrderColumns }) {
+  return (
+    <>
+      <strong>Column Order:</strong>
+      <button
+        style={{ backgroundColor: 'green', color: 'white', margin: '0 15px' }}
+        onClick={randomOrderColumns}
+      >
+        Reshuffle Columns
+      </button>
+      <ul>
+        {columns.map((col, idx) => {
+          return <li key={idx}>{col.Header}</li>;
+        })}
+      </ul>
+    </>
+  );
+}
+
+export default function App() {
+  const [columns, setColumns] = useState(carColumns);
+  const [draggable, setDraggable] = useState(['vin', 'year', 'brand', 'color', 'price']);
+
+  const removeColumn = () => {
+    setColumns(prevState => prevState.slice(1));
+  };
+
+  const removeDraggable = () => {
+    setDraggable(prevState => prevState.slice(1));
+  };
+
+  const randomOrderColumns = () => {
+    setColumns(shuffleArray(columns));
+  };
+
+  return (
+    <div className="App">
+      <TableComponent
+        {...{
+          removeColumn,
+          randomOrderColumns,
+          setColumns,
+          columns,
+          draggable,
+          removeDraggable
+        }}
+      />
+      <br />
+      <ColumnOrderList columns={columns} randomOrderColumns={randomOrderColumns} />
+    </div>
+  );
+}
