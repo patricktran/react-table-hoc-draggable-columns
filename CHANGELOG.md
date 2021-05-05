@@ -6,30 +6,30 @@ lead to an infinite loop depending on your use case.
 
 Update eslint/prettier config
 
-# 1.3.1 (2021-4-20)
+# 1.3.1 (2021-04-20)
 
 Maintenance release adding null/optional chaining checks
 
-# 1.3.0 (2021-4-06)
+# 1.3.0 (2021-04-06)
 
 Refactor rendering process so that calling `setState` inside `onDraggedColumnChange` will not crash the HOC
 `onDraggedColumnChange` and `onDropSuccess` callback method arguments refer to the original column instance and not the modified draggable instance
 
-# 1.2.5 (2020-6-30)
+# 1.2.5 (2020-06-30)
 
 Remove scarf
 
-# 1.2.4 (2020-5-16)
+# 1.2.4 (2020-05-16)
 
 Cleanup - remove leftover console.logs
 Add scarf installation analytics
 
-# 1.2.3 (2020-4-10)
+# 1.2.3 (2020-04-10)
 
 Bug fix that prevented `onDraggedColumnChange` from being called if columns dragged back to their original order
 Bug fix for column re-ordering not working if any of the React Table columns have `show: false` defined
 
-# 1.2.2 (2020-1-17)
+# 1.2.2 (2020-01-17)
 
 Bug fix that prevented sorting on a draggable column
 Bug fix for `enableColumnWideDrag` prop by adding css `display: inline-flex` when set to {false}
