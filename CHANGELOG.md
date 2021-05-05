@@ -1,4 +1,4 @@
-# 1.3.2 (2021-xx-xx)
+# 1.3.2 (2021-05-04)
 
 Bugfix - only call `onDraggedColumnChange` when column ordering is changed in ReactTable.
 We do not want to call `onDraggedColumnChange` if column order is changed outside of ReactTable... this may
