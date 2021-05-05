@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="9px" viewBox="0 0 13 9" version="1.1" 
+    xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="MCX-LV-selected-state" stroke="none" stroke-width="1" fill="#000000" fill-rule="evenodd">
+        <g id="Approved-selected-state-15px" transform="translate(-398.000000, -431.000000)" fill="#000000" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="0.8">
+            <path d="M409.876106,431.702532 C409.572693,431.398734 409.098609,431.398734 408.795196,431.702532 L402.859671,437.664557 L400.166877,434.949367 C399.863464,434.64557 399.389381,434.64557 399.085967,434.949367 C398.782554,435.253165 398.782554,435.727848 399.085967,436.031646 L402.328698,439.297468 C402.632111,439.601266 403.106195,439.601266 403.409608,439.297468 L409.89507,432.78481 C410.17952,432.481013 410.17952,432.006329 409.876106,431.702532 Z" id="White-checkmark-in-second-tile"></path>
+        </g>
+    </g>
+</svg>
